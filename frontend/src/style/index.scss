@@ -1,2 +1,63 @@
-@import "./Main/index.scss";
-@import "./Pages/index.scss";
+body {
+    margin: 0;
+    border: 0;
+}
+
+.navigation {
+    & a {
+        padding: 25px;
+        display: inline-block;
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+        background-color: #ccc;
+        border-radius: 15px;
+        margin: 5px;
+        &:hover {
+            background-color: #aaa;
+        }
+    }
+    margin: 15px;
+}
+
+.subpage {
+    margin: 20px;
+}
+
+.inputForm {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    & input {
+        width: calc(100% - 10px);
+        margin: 3px;
+        padding: 3px;
+    }
+    & button {
+        width: 100%;
+        margin: 3px;
+    }
+    & span {
+        margin: 3px;
+        font-weight: bold;
+    }
+
+    & .errorSpan {
+        color: red;
+    }
+
+    & select {
+        width: calc(100% - 1px);
+        margin: 3px; 
+        padding: 3px;
+    }
+}
+
+.plane {
+    display: flex;
+
+    & .row {
+        display: flex;
+        flex-direction: column;
+    }
+}

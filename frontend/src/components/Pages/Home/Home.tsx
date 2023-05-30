@@ -1,12 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Home: React.FC<any> = (props: any): JSX.Element => {
+const Home = (props: any) => {
     return (
         <div className="home">
-            <img src="/images/plane.png" />
-            <div className="overlay">
-                Flight Booker
-            </div>
+            <h3>Flight Booker</h3>
+            Aplikacja do rezerwacji lotów!<br />
+            <ul>
+                <li>
+                    Kliknij <b>Logowanie</b> aby się zalogować!
+                </li>
+                <li>
+                    Kliknij <b>Rejestracja</b> aby się zarejestrować!
+                </li>
+            </ul>
+            Nasza aplikacja to gwarancja najlepszych cen i jakości!
         </div>
     );
 };

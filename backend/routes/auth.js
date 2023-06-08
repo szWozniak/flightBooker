@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
     let token;
     try {
         token = jwt.sign(
-            { id: user.id },
+            { ClientID: user.ClientID, permissions: "user" },
             process.env.SECRET,
             { expiresIn: "24h" })
     } catch(err) {
@@ -20,7 +20,6 @@ router.post("/login", async (req, res) => {
     }
 
     bcrypt.compare(req.body.password, user.Password, (err, isValid) => {
-        console.log(err)
         if(isValid) {
             return res.send({ status: "OK", token: token })
         } else {

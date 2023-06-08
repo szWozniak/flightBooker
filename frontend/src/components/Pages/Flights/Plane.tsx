@@ -1,35 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 
 const Plane = (props: any) => {
     const { rowTemplate, rowCount } = props;
     const rowTemplateArray = rowTemplate.split("x");
+    const seatsPerRow = rowTemplateArray.reduce((prev: number, next: number) => {
+        return prev + (+next);
+    }, 0)
+    const [seats, setSeats] = useState<number[]>(new Array(seatsPerRow * rowCount).fill(0));
 
-    const generateRow = () => {
-        const seats = [];
+    const getCssForSeat = (seatNo: number) => {
+        if(seatNo == 1) return "clicked";
+        if(seatNo == 2) return "reserved";
+        return "";
+    }
+
+    const clickSeat = (seatNo: number) => {
+        setSeats(oldSeats => oldSeats.map((val, i) => {
+            if(i != seatNo || val == 2) return val;
+            if(val == 1) return 0;
+            return 1;
+        }))
+    }
+
+    const generateRow = (row: number) => {
+        const seatsRow = [];
+        let seatNo: number = row * seatsPerRow;
+        
         for(let i = 0; i < rowTemplateArray.length; i++) {
             if(i > 0) {
-                seats.push(<div key={`A${i}`}>B</div>);
+                seatsRow.push(<div className="empty" key={`A${i}`}></div>);
             }
 
             for(let j = 0; j < rowTemplateArray[i]; j++) {
-                seats.push(<div key={`${i}-${j}`}>S</div>);
+                let savedSeatNo = seatNo;
+
+                seatsRow.push(
+                    <div 
+                        onClick={() => {
+                            clickSeat(savedSeatNo)
+                        }}
+                        className={getCssForSeat(seats[seatNo])} key={seatNo}>{seatNo+1}
+                    </div>
+                );
+                seatNo += 1;
             }
         }
 
-        return seats;
+        return seatsRow;
     }
     const generateRows = () => {
         const rows = [];
         for(let i = 0; i < rowCount; i++) {
-            rows.push(<div className="row" key={i}>{generateRow()}</div>)
+            rows.push(<div className="row" key={i}>{generateRow(i)}</div>)
         }
 
         return rows;
     }
 
     return (
-        <div className="plane">
-            {generateRows()}
+        <div>
+            <div className="plane">
+                {generateRows()}
+            </div>
+            <div>
+                <br />
+                <b>Wybrane miejsca</b><br />
+                <span className="graySpan">
+                    {seats.filter((val) => val == 1).length == 0 && "Brak wybranych miejsc..."}
+                </span>
+                {seats.map((val: number, seatNo: number) => {
+                    if(val == 1) return (<span className="seatChoosen">{seatNo+1}</span>)
+                })}
+                <br /><br />
+                <button className="actionButton">Kliknij, aby dokonać rezerwacji</button>
+            </div>
         </div>
     );
 };

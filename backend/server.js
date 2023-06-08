@@ -17,6 +17,9 @@ app.get("/", (req, res) => {
 const authRoute = require('./routes/auth')
 app.use("/auth", authRoute)
 
+const flightRoute = require('./routes/flight')
+app.use("/flight", flightRoute)
+
 app.listen(process.env.PORT, function () {
     console.log("Backend API listening on port " + process.env.PORT)
 })

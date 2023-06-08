@@ -1,5 +1,5 @@
 export const getToken = () => {
-    return localStorage.getItem('token');
+    return JSON.parse(localStorage.getItem('token'));
 }
 
 //0 - wylogowany 
@@ -32,7 +32,7 @@ export const deleteToken = () => {
 
 export const getHeaders = () => {
     const config = {
-        headers: { Authorization: `Bearer ${getToken()}` }
+        headers: { authorization: `Bearer ${getToken()}` }
     };
     
     return config;

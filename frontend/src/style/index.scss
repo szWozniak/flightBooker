@@ -59,5 +59,159 @@ body {
     & .row {
         display: flex;
         flex-direction: column;
+
+        & div {
+            margin: 3px;
+            background-color: #ccc;
+            padding: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            font-weight: bold;
+            border-radius: 10px;
+            border: 1px solid #999;
+            user-select: none;
+
+            &:hover {
+                background-color: #999;
+                border: 1px solid #333;
+                cursor: pointer;
+            }
+        }
+
+        & .clicked {
+            background-color: rgb(15, 58, 118);
+            color: white;
+
+            &:hover {
+                background-color: rgb(9, 39, 81);
+            }
+        }
+
+        & .reserved {
+            background-color: rgb(162, 41, 41);
+            color: rgb(162, 41, 41);
+            border: 1px solid rgb(92, 10, 10);
+
+            &:hover {
+                background-color: rgb(162, 41, 41);
+                color: rgb(212, 54, 54);
+                border: 1px solid rgb(92, 10, 10);
+            }
+        }
+
+        & .empty {
+            visibility: hidden;
+            height: 0px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
     }
+}
+
+.flightsTable {
+    & td, th {
+        text-align: center;
+    }
+    
+    & th {
+        font-size: 18px;
+        padding: 25px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #333;
+        color: white;
+    }
+
+    & td {
+        padding: 8px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    & .airportDate {
+        & h4 {
+            font-size: 20px;
+            margin-top: 0px;
+            margin-bottom: 6px;
+        }
+
+        & span {
+            color: #aaa;
+        }
+    }
+
+    & .seats {
+        color: #aaa;
+
+        & span {
+            color: black;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    }
+}
+
+
+.seatChoosen {
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: #ddd;
+    margin: 3px;
+    border-radius: 10px;
+    display: inline-block;
+    min-width: 25px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.actionButton {
+    padding: 10px;
+    background-color: rgb(15, 58, 118);
+    border: 1px solid black;
+    color: white;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+
+    &:hover {
+        background-color: rgb(9, 39, 81);
+        cursor: pointer;
+    }
+}
+
+.graySpan {
+    color: #aaa;
+}
+
+.searchOptions {
+    display: flex;
+    align-items: center;
+
+    & select {
+        padding: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-left: 5px;
+        margin-right: -3px;
+    } 
+
+    & button {
+        margin-right: 25px;
+        font-weight: bold;
+
+        & img {
+            width: 20px;
+        }
+    }
+
+    margin-bottom: 10px;
+}
+
+.googleMap {
+    height: 400px;
+    width: 1000px;
 }

@@ -6,16 +6,16 @@ export const getToken = () => {
 //1 - zalogowany, jakkolwiek 
 //2 - zalogowany, pracownik
 export const isPermitted = (permissionLevel) => {
-    if(permissionLevel == 0) {
+    if(permissionLevel === 0) {
         if(getToken()) return false; 
         else return true;
     } 
-    if(permissionLevel == 1) {
+    if(permissionLevel === 1) {
         if(getToken()) return true;
         else return false; 
     }
-    if(permissionLevel == 2) {
-        if(getToken() && localStorage.getItem('permissions') == 1) return true; 
+    if(permissionLevel === 2) {
+        if(getToken() && localStorage.getItem('permissions') === 1) return true; 
         else return false;
     }
 }

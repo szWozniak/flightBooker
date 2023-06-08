@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -13,14 +13,14 @@ const Register = (props: any) => {
     const registerUser = () => {
         if(!!form.email && !!form.firstname && !!form.lastname && !!form.phone 
             && !!form.passport && !!form.password && !!form.passwordRepeat) {
-            if(form.password != form.passwordRepeat) {
+            if(form.password !== form.passwordRepeat) {
                 setError("Hasla nie sa zgodne.");
             } else {
                 axios.post(
                     "http://localhost:4000/auth/register", 
                     { ...form }
                 ).then((res) => {
-                    if(res.data.status == "OK") {
+                    if(res.data.status === "OK") {
                         navigate("/login");
                     } else {
                         setError("Wystapil blad przy rejestracji!");

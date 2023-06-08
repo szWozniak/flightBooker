@@ -17,10 +17,10 @@ const Login = (props: any) => {
         if(!!form.email && !!form.password) {
             //Login
             axios.post(
-                `http://localhost:4000/auth/${type == 0 ? 'login' : 'employeeLogin'}`, 
+                `http://localhost:4000/auth/${type === 0 ? 'login' : 'employeeLogin'}`, 
                 { ...form }
             ).then((res) => {
-                if(res.data.status == "OK") {
+                if(res.data.status === "OK") {
                     saveToken(res.data.token, type);
                     navigate("/");
                 } else {

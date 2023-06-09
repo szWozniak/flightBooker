@@ -13,6 +13,7 @@ const Flight = () => {
             .then((res) => {
                 if(res?.data?.status == "OK") {
                     setFlight(res.data.flight)
+
                 }
             })
     }, [])

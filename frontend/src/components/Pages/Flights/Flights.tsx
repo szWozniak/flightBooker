@@ -80,7 +80,7 @@ const Flights = () => {
                             <td className="airportDate"><h4>{flight.StartPort}</h4> <span>{startDate}</span></td>
                             <td className="airportDate"><h4>{flight.DestPort}</h4> <span>{landDate}</span></td>
                             <td>{flight.PlaneType}</td>
-                            <td className="seats"><span>{flight.Seats}</span>/{flight.Seats}</td>
+                            <td className="seats"><span>{flight.Available}</span>/{flight.Seats}</td>
                             <td className="reservation"><Link className="actionButton" to={`/flight/${flight.FlightID}`}>Rezerwacja</Link></td>
                         </tr>)
                     })}

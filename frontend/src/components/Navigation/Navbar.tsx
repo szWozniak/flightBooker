@@ -14,6 +14,7 @@ const Navbar = (props: any) => {
             {isPermitted(0) && <Link to="/login">Logowanie</Link>}
             {isPermitted(0) && <Link to="/register">Rejestracja</Link>}
             {isPermitted(1) && <Link to="/flights">Wyszukaj lot</Link>}
+            {isPermitted(2) && <Link to="/addflight">Dodaj lot</Link>}
             {isPermitted(1) && <Link to="/logout">Wyloguj sie!</Link>}
 
         </div>

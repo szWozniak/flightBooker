@@ -34,6 +34,31 @@ router.get("/info/:flightid", async (req, res) => {
     return res.send({ status: "OK", flight: {...flight,reservations:seats}})
 })
 
+router.post("/reserve",async (req,res)=>{
+    await sql.query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+    await sql.beginTransaction();
+    console.log(req.body)
+    try{
+        for (let seat of req.body.seats){
+            let query = `INSERT INTO Reservations(ClientID,FlightID,Paid,ReservationDate,Seat,Status)
+                        VALUE (${req.body.ClientID},${req.body.FlightID},1,NOW(),${seat},'A');`
+            await sql.query(query);
+        }
+        await sql.commit();
+        res.send({status:"OK"})
+    }catch (err){
+        console.error(`Error occurred while creating order: ${err.message}`, err);
+        sql.rollback();
+        res.send({error:err.message});
+    }
+
+
+
+
+
+
+})
+
 let getFlights = (sqlWhere) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM AvailableSeats 
@@ -48,7 +73,7 @@ let getReservations = (id) =>{
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Reservations 
             WHERE FlightID = ${id} AND Status = 'A'`, (err, res) => {
-            if(err || res.length === 0) return resolve(null)
+            if(err || res.length === 0) return resolve({})
             return resolve(res)
         })
     })
@@ -57,7 +82,7 @@ let getReservations = (id) =>{
 let getAirports = () => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Airports`, (err, res) => {
-                if(err || res.length == 0) return resolve([])
+                if(err || res.length === 0) return resolve([])
                 return resolve(res)
             })
     })
@@ -67,7 +92,7 @@ let getFlight = (id) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Flights F INNER JOIN Planes P ON P.PlaneID = F.PlaneID 
             WHERE FlightID = ${id}`, (err, res) => {
-                if(err || res.length == 0) return resolve(null)
+                if(err || res.length === 0) return resolve(null)
                 return resolve(res[0])
             })
     })

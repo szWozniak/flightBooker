@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getHeaders } from '../../../utils/jwtToken';
+import { Link, useNavigate } from 'react-router-dom';
+import { getHeaders, isPermitted } from '../../../utils/jwtToken';
 import AirportMap from './AirportMap';
 
 const Flights = () => {
+    const navigate = useNavigate();
     const [flights, setFlights] = useState([]);
     const [airports, setAirports] = useState([]);
     const [airportFrom, setAirportFrom] = useState("dowolne");
@@ -18,12 +19,20 @@ const Flights = () => {
                     setFlights(res.data.flights)
                 }
             })
+            .catch(() => {
+                navigate("/");
+            })
+
         axios.get("http://localhost:4000/flight/airports", getHeaders())
             .then((res) => {
                 if(res?.data?.status == "OK") {
                     setAirports(res.data.airports)
                 }
             })
+            .catch(() => {
+                navigate("/");
+            })
+            
     }, [airportFrom, airportTo])
 
     return (
@@ -69,6 +78,7 @@ const Flights = () => {
                         <th>Samolot</th>
                         <th>Dostępne Miejsca</th>
                         <th>Rezerwacja</th>
+                        {isPermitted(2) && <th>Dla pracownika</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -82,6 +92,8 @@ const Flights = () => {
                             <td>{flight.PlaneType}</td>
                             <td className="seats"><span>{flight.Available}</span>/{flight.Seats}</td>
                             <td className="reservation"><Link className="actionButton" to={`/flight/${flight.FlightID}`}>Rezerwacja</Link></td>
+                            {isPermitted(2) &&
+                                <td className="reservation"><Link className="actionButton redButton" to={`/deleteFlight/${flight.FlightID}`}>Usuń lot</Link></td>}
                         </tr>)
                     })}
                 </tbody>

@@ -7,6 +7,8 @@ import Register from './Pages/Register/Register';
 import Logout from './Pages/Logout/Logout';
 import Flight from './Pages/Flights/Flight';
 import Flights from './Pages/Flights/Flights';
+import DeleteFlight from './Pages/Flights/DeleteFlight';
+import AddFlight from './Pages/Flights/AddFlight';
 
 const Main = (props: any) => {
     return (
@@ -20,6 +22,8 @@ const Main = (props: any) => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/logout" element={<Logout />} />
                         <Route path="/flights" element={<Flights />} />
+                        <Route path="/addflight" element={<AddFlight />} />
+                        <Route path="/deleteFlight/:id" element={<DeleteFlight />} />
                         <Route path="/flight/:id" element={<Flight />} />
                     </Routes>
                 </div>

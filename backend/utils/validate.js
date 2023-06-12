@@ -12,7 +12,10 @@ exports.validate = async (req, res, next) => {
     jwt.verify(token, process.env.SECRET, async (err, decoded) => {
         if(err || !decoded.ClientID) return res.send({ status: "err", err: "UNAUTHORIZED"})
         
+        if(decoded.permissions == "employee") return next();
+        
         let user = await getByClientId(decoded.ClientID)
+        res.locals.ClientID = decoded.ClientID;
         if(!user) return res.send({ status: "err", err: "UNAUTHORIZED"})
 
         next();

@@ -1,20 +1,24 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getHeaders } from '../../../utils/jwtToken';
 import Plane from './Plane';
 
 const Flight = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [flight, setFlight] = useState<any>(null);
 
     useEffect(() => {
         axios.get("http://localhost:4000/flight/info/" + id, getHeaders())
             .then((res) => {
                 if(res?.data?.status == "OK") {
+                    console.log(res.data.flight)
                     setFlight(res.data.flight)
-
                 }
+            })
+            .catch(() => {
+                navigate("/");
             })
     }, [])
 

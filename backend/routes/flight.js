@@ -50,6 +50,25 @@ let deleteFlight = (id) => {
     })
 }
 
+router.post("/reserve",async (req,res)=>{
+    await sql.query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+    await sql.beginTransaction();
+    console.log(req.body)
+    try{
+        for (let seat of req.body.seats){
+            let query = `INSERT INTO Reservations(ClientID,FlightID,Paid,ReservationDate,Seat,Status)
+                        VALUE (${req.body.ClientID},${req.body.FlightID},1,NOW(),${seat},'A');`
+            await sql.query(query);
+        }
+        await sql.commit();
+        res.send({status:"OK"})
+    }catch (err){
+        console.error(`Error occurred while creating order: ${err.message}`, err);
+        sql.rollback();
+        res.send({error:err.message});
+    }
+})
+
 let getFlights = (sqlWhere) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM AvailableSeats
@@ -73,7 +92,7 @@ let getReservations = (id) =>{
 let getAirports = () => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Airports`, (err, res) => {
-                if(err || res.length == 0) return resolve([])
+                if(err || res.length === 0) return resolve([])
                 return resolve(res)
             })
     })
@@ -83,7 +102,7 @@ let getFlight = (id) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM AvailableSeats
             WHERE FlightID = ${id}`, (err, res) => {
-                if(err || res.length == 0) return resolve(null)
+                if(err || res.length === 0) return resolve(null)
                 return resolve(res[0])
             })
     })

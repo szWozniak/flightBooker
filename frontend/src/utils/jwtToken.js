@@ -15,7 +15,7 @@ export const isPermitted = (permissionLevel) => {
         else return false; 
     }
     if(permissionLevel === 2) {
-        if(getToken() && localStorage.getItem('permissions') === 1) return true; 
+        if(getToken() && +localStorage.getItem('permissions') === 1) return true; 
         else return false;
     }
 }

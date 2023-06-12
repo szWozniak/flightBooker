@@ -21,7 +21,30 @@ router.post("/login", async (req, res) => {
 
     bcrypt.compare(req.body.password, user.Password, (err, isValid) => {
         if(isValid) {
-            return res.send({ status: "OK", token: token })
+            return res.send({ status: "OK", token: token, permissions: "user" })
+        } else {
+            return res.send({ status: "err" })
+        }
+    })
+})
+
+router.post("/employeeLogin", async (req, res) => {
+    let user = await getEmployeeByEmail(req.body.email);
+    if(user == null) return res.send({ status: "err" })
+
+    let token;
+    try {
+        token = jwt.sign(
+            { ClientID: user.WorkerID, permissions: "employee" },
+            process.env.SECRET,
+            { expiresIn: "24h" })
+    } catch(err) {
+        return res.send({ status: "err" })
+    }
+
+    bcrypt.compare(req.body.password, user.Password, (err, isValid) => {
+        if(isValid) {
+            return res.send({ status: "OK", token: token, permissions: "employee" })
         } else {
             return res.send({ status: "err" })
         }
@@ -44,7 +67,15 @@ router.post("/register", (req, res) => {
 let getByEmail = (email) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Clients WHERE Email = '${email}'`, (err, res) => {
+            if(err || res.length == 0) return resolve(null)
+            return resolve(res[0])
+        })
+    })
+}
 
+let getEmployeeByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`SELECT * FROM Employees WHERE Email = '${email}'`, (err, res) => {
             if(err || res.length == 0) return resolve(null)
             return resolve(res[0])
         })

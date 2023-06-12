@@ -15,6 +15,8 @@ router.get("/list/:from/:to", validate.validate, async (req, res) => {
         sqlWhere += ` AND DestPort = '${req.params.to}'`
     }
 
+    console.log("Autoryzowano", res.locals.ClientID)
+
     const flights = await getFlights(sqlWhere);
     return res.send({ status: "OK", flights: flights})
 })
@@ -34,9 +36,23 @@ router.get("/info/:flightid", async (req, res) => {
     return res.send({ status: "OK", flight: {...flight,reservations:seats}})
 })
 
+router.delete("/delete/:flightid", async (req, res) => {
+    await deleteFlight(req.params.flightid);
+    return res.send({status: "OK"})
+})
+
+let deleteFlight = (id) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`DELETE FROM Flights WHERE FlightID = ${id}`, (err, res) => {
+                if(err || res.length === 0) return resolve([])
+                return resolve(res)
+            })
+    })
+}
+
 let getFlights = (sqlWhere) => {
     return new Promise((resolve, reject) => {
-        sql.query(`SELECT * FROM AvailableSeats 
+        sql.query(`SELECT * FROM AvailableSeats
             WHERE Start > CURRENT_TIMESTAMP ${sqlWhere} ORDER BY Start ASC`, (err, res) => {
                 if(err || res.length === 0) return resolve([])
                 return resolve(res)
@@ -48,7 +64,7 @@ let getReservations = (id) =>{
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Reservations 
             WHERE FlightID = ${id} AND Status = 'A'`, (err, res) => {
-            if(err || res.length === 0) return resolve(null)
+            if(err || res.length === 0) return resolve({})
             return resolve(res)
         })
     })
@@ -65,7 +81,7 @@ let getAirports = () => {
 
 let getFlight = (id) => {
     return new Promise((resolve, reject) => {
-        sql.query(`SELECT * FROM Flights F INNER JOIN Planes P ON P.PlaneID = F.PlaneID 
+        sql.query(`SELECT * FROM AvailableSeats
             WHERE FlightID = ${id}`, (err, res) => {
                 if(err || res.length == 0) return resolve(null)
                 return resolve(res[0])

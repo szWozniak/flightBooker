@@ -183,6 +183,15 @@ body {
     }
 }
 
+.redButton {
+    background-color: rgb(113, 0, 0);
+    border: 1px solid darkred;
+
+    &:hover {
+        background-color: rgb(74, 3, 3);
+    }
+}
+
 .graySpan {
     color: #aaa;
 }

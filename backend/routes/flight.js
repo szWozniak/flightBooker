@@ -26,6 +26,11 @@ router.get("/airports", validate.validate, async (req, res) => {
     return res.send({ status: "OK", airports: airports})
 })
 
+router.get("/planes", validate.validate, async (req, res) => {
+    const planes = await getPlanes();
+    return res.send({ status: "OK", planes: planes})
+})
+
 router.get("/info/:flightid", async (req, res) => {
     const flight = await getFlight(req.params.flightid);
     const reserved =  Object.values(JSON.parse(JSON.stringify(await getReservations(req.params.flightid))));
@@ -72,6 +77,21 @@ router.post("/reserve",async (req,res)=>{
     }
 })
 
+router.post("/add", async (req, res) => {
+    await addFlight(req.body)
+
+    return res.send({status: "OK"})
+})
+
+let addFlight = (flight) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`INSERT INTO Flights (PlaneID, StartPort, DestPort, Start, Land) VALUES (
+            ${flight.plane}, '${flight.airportFrom}', '${flight.airportTo}', '${flight.dateFrom}', '${flight.dateTo}')`, (err, res) => {
+                return resolve(res)
+            })
+    })
+}
+
 let getFlights = (sqlWhere) => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM AvailableSeats
@@ -92,9 +112,19 @@ let getReservations = (id) =>{
     })
 
 }
+
 let getAirports = () => {
     return new Promise((resolve, reject) => {
         sql.query(`SELECT * FROM Airports`, (err, res) => {
+                if(err || res.length === 0) return resolve([])
+                return resolve(res)
+            })
+    })
+}
+
+let getPlanes = () => {
+    return new Promise((resolve, reject) => {
+        sql.query(`SELECT * FROM Planes`, (err, res) => {
                 if(err || res.length === 0) return resolve([])
                 return resolve(res)
             })

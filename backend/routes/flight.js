@@ -37,7 +37,6 @@ router.get("/info/:flightid", async (req, res) => {
 router.post("/reserve",async (req,res)=>{
     await sql.query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
     await sql.beginTransaction();
-    console.log(req.body)
     try{
         for (let seat of req.body.seats){
             let query = `INSERT INTO Reservations(ClientID,FlightID,Paid,ReservationDate,Seat,Status)
@@ -90,7 +89,7 @@ let getAirports = () => {
 
 let getFlight = (id) => {
     return new Promise((resolve, reject) => {
-        sql.query(`SELECT * FROM Flights F INNER JOIN Planes P ON P.PlaneID = F.PlaneID 
+        sql.query(`SELECT * FROM AvailableSeats
             WHERE FlightID = ${id}`, (err, res) => {
                 if(err || res.length === 0) return resolve(null)
                 return resolve(res[0])

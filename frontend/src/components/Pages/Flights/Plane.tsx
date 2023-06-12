@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from "react-router-dom";
+import axios from 'axios'
 
 const Plane = (props: any) => {
-    const { rowTemplate, rowCount } = props;
+    const { rowTemplate, rowCount, reservedSeats } = props;
     const rowTemplateArray = rowTemplate.split("x");
     const seatsPerRow = rowTemplateArray.reduce((prev: number, next: number) => {
         return prev + (+next);
     }, 0)
-    const [seats, setSeats] = useState<number[]>(new Array(seatsPerRow * rowCount).fill(0));
+    const [seats, setSeats] = useState<number[]>(reservedSeats);
+
+
 
     const getCssForSeat = (seatNo: number) => {
         if(seatNo == 1) return "clicked";

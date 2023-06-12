@@ -49,6 +49,7 @@ const Flight = () => {
             <Plane 
                 rowTemplate={flight?.SeatsPattern}
                 rowCount={flight?.Rownum}
+                reservedSeats={flight?.reservations}
             />
         </div>
     );

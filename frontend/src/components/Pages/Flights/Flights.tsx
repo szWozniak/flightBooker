@@ -32,7 +32,7 @@ const Flights = () => {
             .catch(() => {
                 navigate("/");
             })
-            
+
     }, [airportFrom, airportTo])
 
     return (

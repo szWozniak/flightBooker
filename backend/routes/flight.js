@@ -57,7 +57,11 @@ router.post("/reserve",async (req,res)=>{
         for (let seat of req.body.seats){
             let query = `INSERT INTO Reservations(ClientID,FlightID,Paid,ReservationDate,Seat,Status)
                         VALUE (${req.body.ClientID},${req.body.FlightID},1,NOW(),${seat},'A');`
-            await sql.query(query);
+           try {await sql.query(query,(err,rows,fields)=>{if (err) throw err});}
+            catch (err){
+                throw err;
+            }
+
         }
         await sql.commit();
         res.send({status:"OK"})

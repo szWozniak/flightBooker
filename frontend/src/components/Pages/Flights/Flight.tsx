@@ -40,13 +40,14 @@ const Flight = () => {
                         <td className="airportDate"><h4>{flight?.StartPort}</h4> <span>{startDate}</span></td>
                         <td className="airportDate"><h4>{flight?.DestPort}</h4> <span>{landDate}</span></td>
                         <td>{flight.PlaneType}</td>
-                        <td className="seats"><span>{flight.Seats}</span>/{flight.Seats}</td>
+                        <td className="seats"><span>{flight.Available}</span>/{flight.Seats}</td>
                     </tr>
                 </tbody>
             </table>
 
             <h3>Rezerwacja miejsc</h3>
-            <Plane 
+            <Plane
+                flightID={flight?.FlightID}
                 rowTemplate={flight?.SeatsPattern}
                 rowCount={flight?.Rownum}
                 reservedSeats={flight?.reservations}

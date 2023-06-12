@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 
 const Plane = (props: any) => {
-    const { rowTemplate, rowCount, reservedSeats } = props;
+    const { flightID,rowTemplate, rowCount, reservedSeats } = props;
     const rowTemplateArray = rowTemplate.split("x");
     const seatsPerRow = rowTemplateArray.reduce((prev: number, next: number) => {
         return prev + (+next);
@@ -60,6 +60,27 @@ const Plane = (props: any) => {
 
         return rows;
     }
+    const reserveSeats = ()=>{
+        let res:number[] = []
+        seats.map((v,i)=> { if (v==1) res.push(i)})
+        if (res.length==0){
+            alert("Nie wybrano miejsc!");
+        }
+        else{
+        // DO PODMIANY !!
+             axios.post("http://localhost:4000/flight/reserve",{ClientID:187,FlightID:flightID,seats:res})
+                 .then(res=>{
+                     if (res.data.status=="OK"){
+                         alert("Dziękujemy za rezerwację");
+                         window.location.reload();
+                     }else{
+                         alert("Rezerwacja nie powiodła się :(");
+                         window.location.reload();
+                     }})
+
+
+        }
+    }
 
     return (
         <div>
@@ -76,7 +97,7 @@ const Plane = (props: any) => {
                     if(val == 1) return (<span className="seatChoosen">{seatNo+1}</span>)
                 })}
                 <br /><br />
-                <button className="actionButton">Kliknij, aby dokonać rezerwacji</button>
+                <button className="actionButton" onClick={reserveSeats}>Kliknij, aby dokonać rezerwacji</button>
             </div>
         </div>
     );
